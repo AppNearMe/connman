@@ -65,16 +65,18 @@ struct data_elements {
 };
 
 typedef enum {
-	DE_AUTHENTICATION_TYPE = 0,
-	DE_NETWORK_KEY         = 1,
-	DE_SSID                = 2,
-	DE_MAX                 = 3,
+    DE_AUTHENTICATION_TYPE = 0,
+    DE_NETWORK_KEY         = 1,
+    DE_SSID                = 2,
+    DE_CREDENTIAL	       = 3,
+    DE_MAX                 = 4,
 } DEid;
 
 static const struct data_elements  DEs[DE_MAX] = {
 	{ 0x1003, 2,  TRUE  },
 	{ 0x1027, 64, FALSE },
 	{ 0x1045, 32, FALSE },
+    { 0x100E, 65535, FALSE},
 };
 
 #define DE_VAL_OPEN                 0x0001
@@ -373,6 +375,10 @@ static struct wifi_sc *decode_from_tlv(const uint8_t *tlv_msg, int length)
 			pos += len;
 			continue;
 		}
+        else if(id == DE_CREDENTIAL)
+        {
+            continue;
+        }
 
 		if (!is_de_length_fine(id, len))
 			goto error;
